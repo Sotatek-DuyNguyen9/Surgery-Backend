@@ -1,6 +1,13 @@
-const router = require("express").Router();
-const doctorController = require("../controllers/doctor");
+import express from "express"
+import * as controllers from "../controllers"
+import verifyToken from '../middlewares/verify-token'
+import { isAdmin } from "../middlewares/verity-roles";
 
-router.get("/", doctorController.getDoctors);
+const router = express.Router();
+
+router.use(verifyToken);
+// router.use(isAdmin);
+
+router.get("/", controllers.getCurrent);
 
 module.exports = router;

@@ -26,3 +26,19 @@ export const notFound = (req, res) => {
     message: error.message,
   });
 };
+
+export const unAuthorized = (err, res) => {
+  const error = createError.Unauthorized(err);
+  return res.status(error.status).json({
+    err: 1,
+    message: error.message,
+  })
+}
+
+export const forbidden = (err, res) => {
+  const error = createError.Forbidden(err);
+  return res.status(error.status).json({
+    err: 1,
+    message: error.message,
+  })
+}
