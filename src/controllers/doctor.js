@@ -10,3 +10,12 @@ export const getCurrent = async (req, res) => {
     return internalServerError(req, res);
   }
 };
+
+export const getDoctors = async (req, res) => {
+  try {
+    const response = await services.getDoctors(req.query);
+    return res.status(200).json(response);
+  } catch (error) {
+    return internalServerError(req, res);
+  }
+};
