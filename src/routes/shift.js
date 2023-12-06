@@ -8,7 +8,9 @@ const router = express.Router();
 // router.use(verifyToken);
 // router.use(isAdmin);
 
-// router.get("/", controllers.getCurrent);
+router.get("/", controllers.getShifts);
 router.post("/", controllers.createNewShift);
+router.put("/:id", controllers.updateShift);
+router.delete("/", controllers.deleteShifts);
 
 module.exports = router;
