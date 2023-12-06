@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "duy856847",
+    "password": "duy123456",
     "database": "surgery_database",
     "host": "127.0.0.1",
     "dialect": "mysql",
