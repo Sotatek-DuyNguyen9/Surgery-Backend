@@ -1,6 +1,6 @@
-import db from "../models";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import db from '../models';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const hashPassword = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(8));
@@ -23,14 +23,14 @@ export const register = ({ email, password }) =>
               role: response[0].role,
             },
             process.env.JWT_SECRET,
-            { expiresIn: "5d" }
+            { expiresIn: '5d' }
           )
         : null;
       resolve({
         err: response[1] ? 0 : -1,
         messsage: response[1]
-          ? "Register successfully"
-          : "Email is already registered",
+          ? 'Register successfully'
+          : 'Email is already registered',
         accessToken: token,
       });
     } catch (error) {
@@ -55,14 +55,18 @@ export const login = ({ email, password }) =>
               role: response.role,
             },
             process.env.JWT_SECRET,
-            { expiresIn: "5d" }
+            { expiresIn: '5d' }
           )
         : null;
 
       resolve({
         err: token ? 0 : 1,
-        messsage: token ? "Login is successfully" : "Email or password wrong!",
-        accessToken: token,
+        data: {
+          messsage: token
+            ? 'Login is successfully'
+            : 'Email or password wrong!',
+          access_token: token,
+        },
       });
     } catch (error) {
       reject(error);

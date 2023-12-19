@@ -8,10 +8,10 @@ const router = express.Router();
 // router.use(verifyToken);
 // router.use(isAdmin);
 
-router.get('/', controllers.getShifts);
-router.get('/:id', controllers.getShiftById);
-router.post('/', controllers.createNewShift);
-router.put('/:id', controllers.updateShift);
-router.delete('/', controllers.deleteShifts);
+router.get('/', controllers.getPatients);
+router.get('/:id', controllers.getPatientById);
+router.post('/', controllers.createNewPatient);
+router.put('/:id', controllers.updatePatient);
+router.delete('/', controllers.deletePatients);
 
 module.exports = router;

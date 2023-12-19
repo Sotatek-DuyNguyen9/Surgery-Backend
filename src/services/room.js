@@ -2,7 +2,7 @@ import db from '../models';
 import { Op } from 'sequelize';
 import { badRequest } from '../middlewares/handle-errors';
 
-export const getShifts = ({
+export const getRooms = ({
   page,
   limit,
   sortBy,
@@ -17,7 +17,7 @@ export const getShifts = ({
       const fPage = !page || +page <= 1 ? 0 : +page - 1;
       const checkOrderRequired = sortBy && sortDirection;
 
-      const response = await db.Shift.findAndCountAll({
+      const response = await db.Room.findAndCountAll({
         where: query,
         limit: fLimit,
         offset: fPage * fLimit,
@@ -44,31 +44,31 @@ export const getShifts = ({
     }
   });
 
-export const getShiftById = (id, res) =>
+export const getRoomById = (id, res) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.findOne({ where: { id } });
+      const response = await db.Room.findOne({ where: { id } });
 
       if (response)
         resolve({
           err: 0,
-          messsage: 'Get shift data successfully',
+          messsage: 'Get data successfully',
           data: response,
         });
-      else badRequest(`No shift with id ${id} found!`, res);
+      else badRequest(`No room with id ${id} found!`, res);
     } catch (error) {
       reject(error);
     }
   });
 
-export const createNewShift = (body) =>
+export const createNewRoom = (body) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.create(body);
+      const response = await db.Room.create(body);
 
       resolve({
         err: 0,
-        messsage: 'Create shift successfully',
+        messsage: 'Create room successfully',
         data: response,
       });
     } catch (error) {
@@ -77,33 +77,33 @@ export const createNewShift = (body) =>
     }
   });
 
-export const updateShift = (id, body, res) =>
+export const updateRoom = (id, body, res) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.update(body, { where: { id } });
+      const response = await db.Room.update(body, { where: { id } });
 
       if (response[0] > 0)
         resolve({
           err: 0,
-          messsage: 'Update shift successfully',
+          messsage: 'Update room successfully',
         });
-      else badRequest(`No shift with id ${id} found!`, res);
+      else badRequest(`No room with id ${id} found!`, res);
     } catch (error) {
       reject(error);
     }
   });
 
-export const deleteShifts = (idArr, res) =>
+export const deleteRooms = (idArr, res) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.destroy({ where: { id: idArr } });
+      const response = await db.Room.destroy({ where: { id: idArr } });
 
       if (response > 0)
         resolve({
           err: 0,
-          messsage: `${response} shifts has been deleted`,
+          messsage: `${response} rooms has been deleted`,
         });
-      else badRequest(`No shift found to delete!`, res);
+      else badRequest(`No room found to delete!`, res);
     } catch (error) {
       reject(error);
     }

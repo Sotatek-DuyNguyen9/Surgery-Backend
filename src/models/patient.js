@@ -1,27 +1,27 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Shift extends Model {
+  class Patient extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
-      // Shift.belongsToMany(models.Doctor, { through: "DoctorShift" });
-    }
+    static associate(models) {}
   }
-  Shift.init(
+  Patient.init(
     {
-      dayInWeek: DataTypes.STRING,
-      startDate: DataTypes.STRING,
-      endDate: DataTypes.STRING,
+      name: DataTypes.STRING,
+      email: DataTypes.STRING,
+      phoneNumber: DataTypes.STRING,
+      address: DataTypes.STRING,
+      status: DataTypes.STRING,
+      description: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: 'Shift',
+      modelName: 'Patient',
     }
   );
-  return Shift;
+  return Patient;
 };

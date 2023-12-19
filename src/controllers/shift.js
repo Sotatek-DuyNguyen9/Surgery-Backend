@@ -1,9 +1,18 @@
-import { internalServerError, badRequest } from "../middlewares/handle-errors";
-import * as services from "../services";
+import { internalServerError, badRequest } from '../middlewares/handle-errors';
+import * as services from '../services';
 
 export const getShifts = async (req, res) => {
   try {
     const response = await services.getShifts(req.query);
+    return res.status(200).json(response);
+  } catch (error) {
+    return internalServerError(req, res);
+  }
+};
+
+export const getShiftById = async (req, res) => {
+  try {
+    const response = await services.getShiftById(req.params.id, res);
     return res.status(200).json(response);
   } catch (error) {
     return internalServerError(req, res);

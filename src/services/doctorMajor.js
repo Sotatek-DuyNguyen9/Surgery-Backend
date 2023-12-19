@@ -2,7 +2,7 @@ import db from '../models';
 import { Op } from 'sequelize';
 import { badRequest } from '../middlewares/handle-errors';
 
-export const getShifts = ({
+export const getDoctorMajors = ({
   page,
   limit,
   sortBy,
@@ -17,7 +17,7 @@ export const getShifts = ({
       const fPage = !page || +page <= 1 ? 0 : +page - 1;
       const checkOrderRequired = sortBy && sortDirection;
 
-      const response = await db.Shift.findAndCountAll({
+      const response = await db.DoctorMajor.findAndCountAll({
         where: query,
         limit: fLimit,
         offset: fPage * fLimit,
@@ -44,31 +44,31 @@ export const getShifts = ({
     }
   });
 
-export const getShiftById = (id, res) =>
+export const getDoctorMajorById = (id, res) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.findOne({ where: { id } });
+      const response = await db.DoctorMajor.findOne({ where: { id } });
 
       if (response)
         resolve({
           err: 0,
-          messsage: 'Get shift data successfully',
+          messsage: 'Get data successfully',
           data: response,
         });
-      else badRequest(`No shift with id ${id} found!`, res);
+      else badRequest(`No doctor major with id ${id} found!`, res);
     } catch (error) {
       reject(error);
     }
   });
 
-export const createNewShift = (body) =>
+export const createNewDoctorMajor = (body) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.create(body);
+      const response = await db.DoctorMajor.create(body);
 
       resolve({
         err: 0,
-        messsage: 'Create shift successfully',
+        messsage: 'Create doctor major successfully',
         data: response,
       });
     } catch (error) {
@@ -77,33 +77,33 @@ export const createNewShift = (body) =>
     }
   });
 
-export const updateShift = (id, body, res) =>
+export const updateDoctorMajor = (id, body, res) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.update(body, { where: { id } });
+      const response = await db.DoctorMajor.update(body, { where: { id } });
 
       if (response[0] > 0)
         resolve({
           err: 0,
-          messsage: 'Update shift successfully',
+          messsage: 'Update doctor major successfully',
         });
-      else badRequest(`No shift with id ${id} found!`, res);
+      else badRequest(`No doctor major with id ${id} found!`, res);
     } catch (error) {
       reject(error);
     }
   });
 
-export const deleteShifts = (idArr, res) =>
+export const deleteDoctorMajors = (idArr, res) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.destroy({ where: { id: idArr } });
+      const response = await db.DoctorMajor.destroy({ where: { id: idArr } });
 
       if (response > 0)
         resolve({
           err: 0,
-          messsage: `${response} shifts has been deleted`,
+          messsage: `${response} doctor major has been deleted`,
         });
-      else badRequest(`No shift found to delete!`, res);
+      else badRequest(`No doctor major found to delete!`, res);
     } catch (error) {
       reject(error);
     }

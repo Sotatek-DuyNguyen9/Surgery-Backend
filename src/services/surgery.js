@@ -2,7 +2,7 @@ import db from '../models';
 import { Op } from 'sequelize';
 import { badRequest } from '../middlewares/handle-errors';
 
-export const getShifts = ({
+export const getSurgeries = ({
   page,
   limit,
   sortBy,
@@ -17,14 +17,33 @@ export const getShifts = ({
       const fPage = !page || +page <= 1 ? 0 : +page - 1;
       const checkOrderRequired = sortBy && sortDirection;
 
-      const response = await db.Shift.findAndCountAll({
+      const response = await db.Surgery.findAndCountAll({
         where: query,
         limit: fLimit,
         offset: fPage * fLimit,
         order: checkOrderRequired ? [[sortBy, sortDirection]] : [],
-        // attributes: {
-        //   exclude: ["password"],
-        // },
+        include: [
+          {
+            model: db.Room,
+            as: 'roomData',
+            attributes: ['id', 'name'],
+          },
+          {
+            model: db.Doctor,
+            as: 'doctorData',
+            attributes: ['id', 'name'],
+          },
+          {
+            model: db.Patient,
+            as: 'patientData',
+            attributes: ['id', 'name'],
+          },
+          {
+            model: db.SurgeryType,
+            as: 'surgeryTypeData',
+            attributes: ['id', 'name'],
+          },
+        ],
       });
 
       const totalItem = response.count;
@@ -44,31 +63,31 @@ export const getShifts = ({
     }
   });
 
-export const getShiftById = (id, res) =>
+export const getSurgeryById = (id, res) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.findOne({ where: { id } });
+      const response = await db.Surgery.findOne({ where: { id } });
 
       if (response)
         resolve({
           err: 0,
-          messsage: 'Get shift data successfully',
+          messsage: 'Get data successfully',
           data: response,
         });
-      else badRequest(`No shift with id ${id} found!`, res);
+      else badRequest(`No Surgery with id ${id} found!`, res);
     } catch (error) {
       reject(error);
     }
   });
 
-export const createNewShift = (body) =>
+export const createNewSurgery = (body) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.create(body);
+      const response = await db.Surgery.create(body);
 
       resolve({
         err: 0,
-        messsage: 'Create shift successfully',
+        messsage: 'Create Surgery successfully',
         data: response,
       });
     } catch (error) {
@@ -77,33 +96,33 @@ export const createNewShift = (body) =>
     }
   });
 
-export const updateShift = (id, body, res) =>
+export const updateSurgery = (id, body, res) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.update(body, { where: { id } });
+      const response = await db.Surgery.update(body, { where: { id } });
 
       if (response[0] > 0)
         resolve({
           err: 0,
-          messsage: 'Update shift successfully',
+          messsage: 'Update Surgery successfully',
         });
-      else badRequest(`No shift with id ${id} found!`, res);
+      else badRequest(`No Surgery with id ${id} found!`, res);
     } catch (error) {
       reject(error);
     }
   });
 
-export const deleteShifts = (idArr, res) =>
+export const deleteSurgeries = (idArr, res) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Shift.destroy({ where: { id: idArr } });
+      const response = await db.Surgery.destroy({ where: { id: idArr } });
 
       if (response > 0)
         resolve({
           err: 0,
-          messsage: `${response} shifts has been deleted`,
+          messsage: `${response} Surgeries has been deleted`,
         });
-      else badRequest(`No shift found to delete!`, res);
+      else badRequest(`No Surgery found to delete!`, res);
     } catch (error) {
       reject(error);
     }

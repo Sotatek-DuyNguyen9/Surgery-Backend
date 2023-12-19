@@ -1,5 +1,5 @@
-import db from "../models";
-import { Op } from "sequelize";
+import db from '../models';
+import { Op } from 'sequelize';
 
 export const getOne = (doctorId) =>
   new Promise(async (resolve, reject) => {
@@ -7,20 +7,26 @@ export const getOne = (doctorId) =>
       const response = await db.Doctor.findOne({
         where: { id: doctorId },
         attributes: {
-          exclude: ["password"],
+          exclude: ['password'],
         },
         include: [
           {
             model: db.Shift,
-            as: "shiftData",
-            attributes: { exclude: ["createdAt", "updatedAt"] },
+            as: 'shiftData',
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+            through: { attributes: [] },
+          },
+          {
+            model: db.SurgeryTypes,
+            as: 'majorData',
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
             through: { attributes: [] },
           },
         ],
       });
       resolve({
         err: response ? 0 : -1,
-        messsage: response ? "Find successfully" : "User not found",
+        messsage: response ? 'Find successfully' : 'User not found',
         userData: response,
       });
     } catch (error) {
@@ -43,7 +49,6 @@ export const getDoctors = ({
       const fLimit = +limit || 100;
       const fPage = !page || +page <= 1 ? 0 : +page - 1;
       const checkOrderRequired = sortBy && sortDirection;
-
       const response = await db.Doctor.findAndCountAll({
         // raw: true,
         // nest: true,
@@ -52,25 +57,33 @@ export const getDoctors = ({
         offset: fPage * fLimit,
         order: checkOrderRequired ? [[sortBy, sortDirection]] : [],
         attributes: {
-          exclude: ["password"],
+          exclude: ['password'],
         },
         include: [
           {
             model: db.Shift,
-            as: "shiftData",
-            attributes: { exclude: ["createdAt", "updatedAt"] },
+            as: 'shiftData',
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+            through: { attributes: [] },
+          },
+          {
+            model: db.SurgeryType,
+            as: 'majorData',
+            attributes: {
+              exclude: ['createdAt', 'updatedAt', 'expectedTime', 'priority'],
+            },
             through: { attributes: [] },
           },
         ],
       });
 
-      const totalItem = response.count;
+      const totalItem = response?.rows?.length;
 
       resolve({
         err: response ? 0 : 1,
         messsage: response
-          ? "Get data doctor successfully"
-          : "Get data doctor failed",
+          ? 'Get data doctor successfully'
+          : 'Get data doctor failed',
         data: response?.rows,
         metadata: {
           totalItem: totalItem,
