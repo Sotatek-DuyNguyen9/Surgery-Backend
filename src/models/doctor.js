@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       address: DataTypes.STRING,
       status: DataTypes.STRING,
       role: DataTypes.STRING,
+      breakTime: DataTypes.INTEGER,
     },
     {
       sequelize,
