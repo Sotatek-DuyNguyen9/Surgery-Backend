@@ -13,17 +13,17 @@ module.exports = (sequelize, DataTypes) => {
     {
       DoctorId: {
         type: DataTypes.INTEGER,
-        references: {
-          model: 'doctors',
-          key: 'id',
-        },
+        // references: {
+        //   model: 'Doctors',
+        //   key: 'id',
+        // },
       },
       SurgerytypeId: {
         type: DataTypes.INTEGER,
-        references: {
-          model: 'surgerytypes',
-          key: 'id',
-        },
+        // references: {
+        //   model: 'Surgerytypes',
+        //   key: 'id',
+        // },
       },
       qualification: DataTypes.INTEGER,
     },
