@@ -41,7 +41,7 @@ export const getSurgeries = ({
           {
             model: db.SurgeryType,
             as: 'surgeryTypeData',
-            attributes: ['id', 'name'],
+            attributes: ['id', 'name', 'expectedTime'],
           },
         ],
       });
