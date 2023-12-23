@@ -16,6 +16,9 @@ const config = {
   host: process.env.DB_HOST,
   dialect: 'mysql',
   dialectModule: require('mysql2'),
+  // dialectOptions: {
+  //   useUTC: false,
+  // },
   logging: false,
   timezone: '+07:00',
 };

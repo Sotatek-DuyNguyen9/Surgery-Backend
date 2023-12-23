@@ -7,3 +7,4 @@ export * from './doctorShift';
 export * from './surgeryType';
 export * from './doctorMajor';
 export * from './surgery';
+export * from './setting';
