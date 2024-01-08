@@ -31,12 +31,12 @@ export const getSurgeries = ({
           {
             model: db.Doctor,
             as: 'doctorData',
-            attributes: ['id', 'name'],
+            attributes: ['id', 'name', 'email', 'color'],
           },
           {
             model: db.Patient,
             as: 'patientData',
-            attributes: ['id', 'name'],
+            attributes: ['id', 'name', 'email'],
           },
           {
             model: db.SurgeryType,

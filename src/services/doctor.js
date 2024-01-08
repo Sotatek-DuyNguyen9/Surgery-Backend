@@ -7,7 +7,7 @@ export const getOne = (doctorId) =>
       const response = await db.Doctor.findOne({
         where: { id: doctorId },
         attributes: {
-          exclude: ['password'],
+          exclude: ['password', 'color'],
         },
         include: [
           {
@@ -57,7 +57,7 @@ export const getDoctors = ({
         offset: fPage * fLimit,
         order: checkOrderRequired ? [[sortBy, sortDirection]] : [],
         attributes: {
-          exclude: ['password'],
+          exclude: ['password', 'color'],
         },
         include: [
           {

@@ -25,7 +25,6 @@ module.exports = (sequelize, DataTypes) => {
         //   key: 'id',
         // },
       },
-      qualification: DataTypes.INTEGER,
     },
     {
       sequelize,

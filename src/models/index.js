@@ -20,7 +20,7 @@ const config = {
   //   useUTC: false,
   // },
   logging: false,
-  timezone: '+07:00',
+  // timezone: '+07:00',
 };
 
 const db = {};

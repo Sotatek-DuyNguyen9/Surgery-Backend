@@ -35,6 +35,11 @@ module.exports = (sequelize, DataTypes) => {
       actualEndDate: DataTypes.DATE,
       status: DataTypes.STRING,
       priority: DataTypes.INTEGER,
+      expectedTime: DataTypes.INTEGER,
+      level: DataTypes.INTEGER,
+      informedPatient: DataTypes.BOOLEAN,
+      informedDoctor: DataTypes.BOOLEAN,
+      isChecked: DataTypes.BOOLEAN,
     },
     {
       sequelize,
