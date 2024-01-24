@@ -95,8 +95,8 @@ export const generateDoctorEmail = (
   surgeryType,
   operatingRoom
 ) => {
-  const startDate = new Date(surgeryDate);
-  startDate.setUTCHours(startDate.getUTCHours() - 7);
+  // const startDate = new Date(surgeryDate);
+  // startDate.setUTCHours(startDate.getUTCHours() - 7);
 
   return `
       <!DOCTYPE html>
@@ -158,7 +158,7 @@ export const generateDoctorEmail = (
           <p>Chúng tôi muốn thông báo đến bạn rằng sắp đến thời gian phẫu thuật mà bạn phải thực hiện</p>
           <p>Chi tiết về ca phẫu thuật:</p>
           <ul>
-            <li>Ngày giờ dự kiến: ${dayjs(startDate).format(
+            <li>Ngày giờ dự kiến: ${dayjs(surgeryDate).format(
               'HH:mm:ss DD/MM/YYYY'
             )}</li>
             <li>Bệnh nhân: ${patientName}</li>

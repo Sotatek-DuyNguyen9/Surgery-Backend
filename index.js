@@ -14,9 +14,10 @@ app.use(express.urlencoded({ extended: true }));
 initRoutes(app);
 
 // cron.schedule('* * * * *', () => {
-//   console.log('running a task every minute');
-checkAndRunJob();
-// });
+cron.schedule('0 * * * *', () => {
+  console.log('running a task');
+  checkAndRunJob();
+});
 
 const PORT = 5000;
 

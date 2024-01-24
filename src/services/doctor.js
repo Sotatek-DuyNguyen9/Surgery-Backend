@@ -95,3 +95,35 @@ export const getDoctors = ({
       reject(error);
     }
   });
+
+export const updateDoctor = (id, body, res) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Doctor.update(body, { where: { id } });
+
+      if (response[0] > 0)
+        resolve({
+          err: 0,
+          messsage: 'Update doctor successfully',
+        });
+      else badRequest(`No doctor with id ${id} found!`, res);
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+export const deleteDoctors = (idArr, res) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Doctor.destroy({ where: { id: idArr } });
+
+      if (response > 0)
+        resolve({
+          err: 0,
+          messsage: `${response} doctors has been deleted`,
+        });
+      else badRequest(`No doctor found to delete!`, res);
+    } catch (error) {
+      reject(error);
+    }
+  });

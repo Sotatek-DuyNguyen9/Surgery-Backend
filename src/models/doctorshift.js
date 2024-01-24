@@ -7,24 +7,21 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {}
+    static associate(models) {
+      DoctorShift.belongsTo(models.Shift, {
+        as: 'shiftData',
+        foreignKey: 'ShiftId',
+      });
+    }
   }
   DoctorShift.init(
     {
-      DoctorId: {
+      id: {
         type: DataTypes.INTEGER,
-        // references: {
-        //   model: 'Doctors',
-        //   key: 'id',
-        // },
+        primaryKey: true,
       },
-      ShiftId: {
-        type: DataTypes.INTEGER,
-        // references: {
-        //   model: 'Shifts',
-        //   key: 'id',
-        // },
-      },
+      DoctorId: DataTypes.INTEGER,
+      ShiftId: DataTypes.INTEGER,
       status: DataTypes.STRING,
     },
     {

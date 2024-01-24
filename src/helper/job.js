@@ -2,23 +2,24 @@ import dayjs from 'dayjs';
 import nodemailer from 'nodemailer';
 import db from '../models';
 import { generateDoctorEmail, generatePatientEmail } from './generate-mail';
+import { ESurgeryStatus } from '../constants';
 
 export const updateActualDate = async (surgeryList) => {
   for (const surgery of surgeryList) {
     const { expectedStartDate, expectedEndDate, id } = surgery;
 
-    const startDateInPast = dayjs(expectedStartDate).isBefore(dayjs());
-    if (startDateInPast) {
-      await db.Surgery.update(
-        { actualStartDate: expectedStartDate },
-        { where: { id } }
-      );
-    }
+    // const startDateInPast = dayjs(expectedStartDate).isBefore(dayjs());
+    // if (startDateInPast) {
+    //   await db.Surgery.update(
+    //     { actualStartDate: expectedStartDate },
+    //     { where: { id } }
+    //   );
+    // }
 
     const endDateInPast = dayjs(expectedEndDate).isBefore(dayjs());
     if (endDateInPast) {
       await db.Surgery.update(
-        { actualEndDate: expectedEndDate, isChecked: true },
+        { status: ESurgeryStatus.DONE, isChecked: true },
         { where: { id } }
       );
     }
@@ -43,19 +44,21 @@ export const sendInformations = async (surgeryList, settingInfo) => {
     for (const surgery of surgeryList) {
       const {
         id,
-        expectedStartDate,
+        actualStartDate,
+        informedPatient,
+        informedDoctor,
         doctorData,
         patientData,
         surgeryTypeData,
         roomData,
       } = surgery;
-      const minutesDifference = dayjs(expectedStartDate).diff(
-        dayjs(),
-        'minutes'
-      );
+      const minutesDifference = dayjs(actualStartDate).diff(dayjs(), 'minutes');
+
+      console.log({ informedPatient, informedDoctor });
 
       if (
         settingInfo?.patientNotification === true &&
+        !informedPatient &&
         minutesDifference <= settingInfo?.patientNotiBefore &&
         patientData.email === 'duyhacde@gmail.com'
       ) {
@@ -65,7 +68,7 @@ export const sendInformations = async (surgeryList, settingInfo) => {
           subject: 'Thông báo phẫu thuật',
           html: generatePatientEmail(
             patientData.name,
-            expectedStartDate,
+            actualStartDate,
             doctorData.name,
             surgeryTypeData.name,
             roomData.name
@@ -76,10 +79,12 @@ export const sendInformations = async (surgeryList, settingInfo) => {
         console.log(
           `Email sent to patient ${patientData.email} successfully ${id}`
         );
+        await db.Surgery.update({ informedPatient: true }, { where: { id } });
       }
 
       if (
         settingInfo?.doctorNotification === true &&
+        !informedDoctor &&
         minutesDifference <= settingInfo?.doctorNotiBefore &&
         patientData.email === 'duyhacde@gmail.com'
       ) {
@@ -89,7 +94,7 @@ export const sendInformations = async (surgeryList, settingInfo) => {
           subject: 'Thông báo Phẫu thuật',
           html: generateDoctorEmail(
             patientData.name,
-            expectedStartDate,
+            actualStartDate,
             doctorData.name,
             surgeryTypeData.name,
             roomData.name
@@ -100,27 +105,8 @@ export const sendInformations = async (surgeryList, settingInfo) => {
         console.log(
           `Email sent to doctor ${patientData.email} successfully ${id}`
         );
+        await db.Surgery.update({ informedDoctor: true }, { where: { id } });
       }
-
-      // if (minutesDifference > 0 && minutesDifference <= 30) {
-      //   const transporter = nodemailer.createTransport({
-      //     service: 'gmail',
-      //     auth: {
-      //       user: 'your_email@gmail.com',
-      //       pass: 'your_email_password',
-      //     },
-      //   });
-
-      //   const mailOptions = {
-      //     from: 'your_email@gmail.com',
-      //     to: [doctorData.email, patientData.email],
-      //     subject: 'Thông báo phẫu thuật sắp diễn ra',
-      //     text: `Phẫu thuật sắp diễn ra trong ${minutesDifference} phút.`,
-      //   };
-
-      //   // Gửi email
-      //   await transporter.sendMail(mailOptions);
-      // }
     }
   } catch (error) {
     console.log(error);
@@ -160,5 +146,5 @@ export const checkAndRunJob = async () => {
 
   //   console.log(settingData.rows);
   updateActualDate(surgeryData.rows);
-  // sendInformations(surgeryData.rows, settingData.rows[0]);
+  sendInformations(surgeryData.rows, settingData.rows[0]);
 };

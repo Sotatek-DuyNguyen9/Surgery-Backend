@@ -25,6 +25,14 @@ export const getDoctorShifts = ({
         // attributes: {
         //   exclude: ["password"],
         // },
+        include: [
+          {
+            model: db.Shift,
+            as: 'shiftData',
+            // attributes: { exclude: ['createdAt', 'updatedAt'] },
+            // through: { attributes: [] },
+          },
+        ],
       });
 
       const totalItem = response.count;

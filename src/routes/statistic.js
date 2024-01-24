@@ -8,9 +8,6 @@ const router = express.Router();
 // router.use(verifyToken);
 // router.use(isAdmin);
 
-// router.get("/", controllers.getCurrent);
-router.get('/', controllers.getDoctors);
-router.put('/:id', controllers.updateDoctor);
-router.delete('/', controllers.deleteDoctors);
+router.get('/', controllers.getStatistic);
 
 module.exports = router;
